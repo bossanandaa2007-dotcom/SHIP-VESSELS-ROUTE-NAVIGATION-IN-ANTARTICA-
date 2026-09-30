@@ -1,0 +1,27 @@
+**Abstract**
+
+Antarctic research and resupply vessels operating on routes such as 
+Cape Town–Bharati–Maitri navigate one of the most data-sparse and physically volatile environments on Earth,
+where sea-ice concentration shifts by the day, tabular icebergs drift unpredictably under the combined pull of wind,
+ocean currents and Coriolis force, and a route judged safe at departure can turn hazardous before the vessel arrives — yet the navigator's actual support today is a periodic,
+manually issued advisory that never fuses these signals into one forward-looking picture. Polar Navigation Intelligence is a working prototype built to close exactly that integration gap:
+it ingests live ship positions, weather and wave forecasts, and sea-ice data in real time, lays them over a hazard-scored grid of the operating area, and runs a search-based optimizer over that grid to return a single recommended route — complete with timestamped waypoints, 
+flagged obstacles, and any hold time needed to let a forecast storm or iceberg corridor pass — all rendered on a live, flight-tracker-style map that updates the moment new data arrives. The same pipeline generalizes beyond one vessel or one voyage: any ship broadcasting its position can be routed onto the safer, 
+more fuel-efficient path the system computes, which is the core of the underlying business model.
+
+**How it actually works**
+
+The system starts with a React and Leaflet frontend that gives an operator a live map of their fleet
+and a simple form to request a route between two points; because it's subscribed to a Supabase Realtime channel, 
+every ship marker moves the instant a new position is written to the database, with no polling and no refresh, 
+giving it the same immediacy as a flight-tracking app. Behind that sits a FastAPI backend running two kinds of work: 
+a set of ingestion workers that continuously pull real AIS ship positions from the aisstream.io network, 
+marine wind and wave forecasts from Open-Meteo, and satellite sea-ice concentration from Copernicus Marine Service, 
+writing all of it into Supabase's Postgres database; and a routing engine that, whenever an operator submits an origin and destination, 
+lays a grid over that stretch of ocean, scores every cell by combining ice concentration, iceberg proximity, 
+wave height and storm risk into a single hazard cost, and then runs an A* search across that grid to find the lowest-cost path — the same "AI prediction feeding an optimization algorithm" architecture 
+the mentor's own process diagram called for, except that here the "AI prediction" is genuinely live forecast data rather than a static assumption, and the "optimization" is a real,
+explainable search rather than a black box. The result comes back as a route with a timestamped sequence of waypoints, a table of obstacles and when the ship will encounter them, 
+and — where a storm or iceberg corridor makes the direct path unsafe — a planned hold time built into the route itself, exactly like the Route B example in the mentor's brief.
+Supabase Auth ties every ship and route to a fleet owner's account, so the architecture is multi-tenant from day one: the same pipeline that produces one safe route for one ship is, 
+at the business level, a subscription service that can onboard any operator's fleet and take every one of their ships seriously enough to route it safely and efficiently, voyage after voyage.

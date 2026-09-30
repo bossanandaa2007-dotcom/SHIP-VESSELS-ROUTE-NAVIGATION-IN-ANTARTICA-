@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: #0a0f1e;
+}
+
+/* Leaflet dark-theme tweaks */
+.leaflet-container {
+  background: #0a0f1e;
+  font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #0e1729;
+  color: #e2e8f0;
+}
+
+.leaflet-bar a {
+  background: #0b1322;
+  color: #e2e8f0;
+  border-bottom-color: #1e293b;
+}
+
+.leaflet-bar a:hover {
+  background: #1e293b;
+}
+
+/* Custom map markers (built with L.divIcon) */
+.pn-marker {
+  background: none;
+  border: none;
+}
+
+.pn-ship {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.pn-ship-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: #22c55e;
+  border: 2px solid #052e16;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+  flex: none;
+}
+
+.pn-ship-label {
+  background: rgba(11, 19, 34, 0.9);
+  border: 1px solid #1e293b;
+  color: #e2e8f0;
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 1px 6px;
+  border-radius: 6px;
+}
+
+.pn-ship-arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 12px solid #22c55e;
+  filter: drop-shadow(0 0 2px rgba(34, 197, 94, 0.5));
+  flex: none;
+  transform-origin: 50% 60%;
+}
+
+.pn-berg {
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 12px solid #bfdbfe;
+  filter: drop-shadow(0 0 2px rgba(191, 219, 254, 0.6));
+}
+
+.pn-station {
+  width: 9px;
+  height: 9px;
+  border-radius: 9999px;
+  background: #fbbf24;
+  border: 2px solid #451a03;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.25);
+}
+
+/* Bharati & Maitri (India) get a distinct color, same shape/size */
+.pn-station-india {
+  width: 9px;
+  height: 9px;
+  border-radius: 9999px;
+  background: #fb923c;
+  border: 2px solid #431407;
+  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.3);
+}
+
+/* Text-only permanent tooltips used for station names and sea labels */
+.leaflet-tooltip.pn-station-label {
+  background: rgba(11, 19, 34, 0.85);
+  border: 1px solid #1e293b;
+  color: #fde68a;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.leaflet-tooltip.pn-station-label::before {
+  display: none;
+}
+
+.leaflet-tooltip.pn-station-label-india {
+  color: #fed7aa;
+  border-color: #7c2d12;
+}
+
+.leaflet-tooltip.pn-sea-label {
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: #7dd3fc;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 600;
+  text-shadow:
+    0 0 4px #0a0f1e,
+    0 0 4px #0a0f1e,
+    0 0 4px #0a0f1e;
+  white-space: nowrap;
+}
+.leaflet-tooltip.pn-sea-label::before {
+  display: none;
+}
